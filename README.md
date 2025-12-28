@@ -4,9 +4,11 @@ Real Time/
 ├── 1stream_simulator.py        # Simulates real-time AIS stream
 ├── 2realtime_simulator.py      # Processes stream (decode + classify)
 │
+
 ├── input/
 │   └── AIS_Klaipeda_From20250908_To20251008 2.csv          # Input CSV file
 │
+
 └── outputs/
     ├── position_class_a.csv
     ├── position_class_b.csv
