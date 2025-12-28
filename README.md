@@ -22,14 +22,14 @@ outputs/
 
 Commands to run :
 In terminal 1
-1. python3 1stream_simulator.py
+1. "python3 1stream_simulator.py"
 
    
-In terminal 2
-python3 1stream_simulator.py | python3 2realtime_simulator.py
+In terminal 2:
+Run this command "python3 1stream_simulator.py | python3 2realtime_simulator.py"
 
 Checking Real-Time File Updates
-tail -f outputs/position_class_a.csv
+"tail -f outputs/position_class_a.csv"
 
 
 STEP1:
