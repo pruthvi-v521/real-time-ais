@@ -23,6 +23,8 @@ outputs/
 Commands to run :
 In terminal 1
 1. python3 1stream_simulator.py
+
+   
 In terminal 2
 python3 1stream_simulator.py | python3 2realtime_simulator.py
 
