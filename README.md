@@ -2,6 +2,7 @@ FOLDER STRUCTURE
 Real Time/
 │
 ├── 1stream_simulator.py        # Simulates real-time AIS stream
+
 ├── 2realtime_simulator.py      # Processes stream (decode + classify)
 │
 
