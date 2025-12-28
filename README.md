@@ -1,24 +1,24 @@
 FOLDER STRUCTURE
 Real Time/
-│
-├── 1stream_simulator.py        # Simulates real-time AIS stream
 
-├── 2realtime_simulator.py      # Processes stream (decode + classify)
-│
+1stream_simulator.py        # Simulates real-time AIS stream
 
-├── input/
-│   └── AIS_Klaipeda_From20250908_To20251008 2.csv          # Input CSV file
-│
+2realtime_simulator.py      # Processes stream (decode + classify)
 
-└── outputs/
-    ├── position_class_a.csv
-    ├── position_class_b.csv
-    ├── static_voyage.csv
-    ├── base_station.csv
-    ├── aids_navigation.csv
-    ├── safety_related.csv
-    ├── binary_misc.csv
-    ├── unknown_or_rare.csv
+
+input/
+AIS_Klaipeda_From20250908_To20251008 2.csv          # Input CSV file
+
+
+outputs/
+    position_class_a.csv
+    position_class_b.csv
+    static_voyage.csv
+    base_station.csv
+    aids_navigation.csv
+    safety_related.csv
+    binary_misc.csv
+    unknown_or_rare.csv
 
 STEP1:
 How the Real-Time Simulation Works
