@@ -26,7 +26,8 @@ In terminal 1
 
    
 In terminal 2:
-Run this command "python3 1stream_simulator.py | python3 2realtime_simulator.py"
+Run this command
+2. "python3 1stream_simulator.py | python3 2realtime_simulator.py"
 
 Checking Real-Time File Updates
 "tail -f outputs/position_class_a.csv"
