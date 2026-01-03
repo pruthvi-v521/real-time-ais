@@ -1,69 +1,91 @@
-FOLDER STRUCTURE
-Real Time/
+real-time-ais/
+├── input/                       # Place your AIS CSV input files here
+│   └── AIS_Klaipeda_From20250908_To20251008 2.csv
+├── outputs/                     # Real-time outputs (CSV files will appear here)
+│   ├── position_class_a.csv
+│   ├── position_class_b.csv
+│   ├── static_voyage.csv
+│   ├── base_station.csv
+│   ├── safety_related.csv
+│   └── binary_misc.csv
+├── 1stream_simulator.py         # Simulates real-time streaming from CSV
+├── 2realtime_pipeline.py        # Receives, decodes, normalizes, classifies, cleans, writes output
+└── README.md
 
-1stream_simulator.py        # Simulates real-time AIS stream
+How to Run
+Step 1: Prepare input
 
-2realtime_simulator.py      # Processes stream (decode + classify)
+Create a folder called input
 
+Place your AIS CSV file(s) in it, e.g., AIS_sample.csv
 
-input/
-AIS_Klaipeda_From20250908_To20251008 2.csv          # Input CSV file
+Ensure the CSV has a column called nmea_message containing the AIS messages
 
-
-outputs/
-    position_class_a.csv
-    position_class_b.csv
-    static_voyage.csv
-    base_station.csv
-    aids_navigation.csv
-    safety_related.csv
-    binary_misc.csv
-    unknown_or_rare.csv
-
-Commands to run :
-In terminal 1
-1. "python3 1stream_simulator.py"
-
-   
-In terminal 2:
-Run this command
-2. "python3 1stream_simulator.py | python3 2realtime_simulator.py"
-
-Checking Real-Time File Updates
-"tail -f outputs/position_class_a.csv"
+STEP 2: Run Stream Simulator (Terminal 1)
+python3 1stream_simulator.py
 
 
-STEP1:
-How the Real-Time Simulation Works
-1stream_simulator.py
+Starts a TCP server on 0.0.0.0:9000
 
-Reads the AIS CSV file line by line
+Simulates sending AIS messages line-by-line with a small delay
 
-Adds a small delay between messages, speed up or slower the delay by changing seconds.
+STEP 3: Run Real-Time Pipeline (Terminal 2)
+python3 2realtime_pipeline.py
 
-Prints NMEA messages to stdout (simulated live feed)
 
-STEP 2: 
-2realtime_simulator.py
+Connects to the simulator server (127.0.0.1:9000)
 
-Reads messages from stdin
+Decodes, normalizes, classifies, cleans, and writes CSV files
 
-Decodes messages using pyais
+Outputs appear in outputs/ folder continuously
 
-Classifies messages by semantic meaning
+Tip: You can monitor live CSV growth using:
+tail -f outputs/position_class_a.csv
 
-Appends decoded data continuously to CSV files
+Once server is stopped :
+Cleaning summary is obtained
+CLEANING SUMMARY
 
-💡 Files are updated continuously while the stream is running
+position_class_a
+----------------
+Total rows   : 4999
+Kept rows    : 4711
+Removed rows : 288
+Removal reasons:
+  - invalid_lat: 287
+  - invalid_sog: 1
 
-RETURNED OUTPUT
-| Output CSV             | AIS Message Types | Meaning                     |
-| ---------------------- | ----------------- | --------------------------- |
-| `position_class_a.csv` | 1, 2, 3           | Class A ship positions      |
-| `position_class_b.csv` | 18, 19            | Class B ship positions      |
-| `static_voyage.csv`    | 5, 24             | Static vessel info          |
-| `base_station.csv`     | 4                 | Shore base stations         |
-| `aids_navigation.csv`  | 21                | AtoN                        |
-| `safety_related.csv`   | 7, 10, 12–15      | Safety & acknowledgments    |
-| `binary_misc.csv`      | 6, 8, 20, 23, 27  | Binary / addressed messages |
-| `unknown_or_rare.csv`  | 9, 11             | Rare or special             |
+position_class_b
+----------------
+Total rows   : 281
+Kept rows    : 281
+Removed rows : 0
+
+static_voyage
+-------------
+Total rows   : 296
+Kept rows    : 141
+Removed rows : 132
+Removal reasons:
+  - invalid_mmsi: 132
+
+base_station
+------------
+Total rows   : 243
+Kept rows    : 243
+Removed rows : 0
+
+safety_related
+--------------
+Total rows   : 111
+Kept rows    : 20
+Removed rows : 80
+Removal reasons:
+  - invalid_mmsi: 80
+
+binary_misc
+-----------
+Total rows   : 965
+Kept rows    : 424
+Removed rows : 0
+similar to this
