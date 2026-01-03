@@ -1,19 +1,40 @@
+import socket
 import csv
 import time
-import sys
 
-INPUT_CSV = "input/AIS_Klaipeda_From20250908_To20251008 2.csv"
-DELAY_SECONDS = 0.01   # adjust: 0.1 = slower, 0.001 = faster
+HOST = "0.0.0.0"
+PORT = 9000
+CSV_FILE = "input/AIS_Klaipeda_From20250908_To20251008 2.csv"
+DELAY_SECONDS = 1  # change to speed up or slow down
 
-def stream():
-    with open(INPUT_CSV, newline="") as f:
-        reader = csv.DictReader(f)
+def start_server():
+    server_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+    server_socket.bind((HOST, PORT))
+    server_socket.listen(1)
+
+    print(f"[SERVER] AIS Streaming Server running on {HOST}:{PORT}")
+    print("[SERVER] Waiting for client connection...")
+
+    conn, addr = server_socket.accept()
+    print(f"[SERVER] Client connected from {addr}")
+
+    with open(CSV_FILE, newline="", encoding="utf-8") as csvfile:
+        reader = csv.DictReader(csvfile)
+
         for row in reader:
-            nmea = row["nmea_message"].strip()
-            if nmea:
-                print(nmea)
-                sys.stdout.flush()
-                time.sleep(DELAY_SECONDS)
+            nmea = row.get("nmea_message")
+            if not nmea:
+                continue
+
+            message = nmea.strip() + "\n"
+            conn.sendall(message.encode("utf-8"))
+
+            print(f"[SERVER] Sent AIS message")
+            time.sleep(DELAY_SECONDS)
+
+    conn.close()
+    server_socket.close()
+    print("[SERVER] Streaming finished")
 
 if __name__ == "__main__":
-    stream()
+    start_server()
